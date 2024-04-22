@@ -17,21 +17,53 @@ const emits = defineEmits<{
 }>();
 
 const userRegisterData = ref({
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    password_confirmation: ''
+})
+
+const userLoginData = ref({
     email: '',
     password: '',
 })
 
-const handleUserRegister = async () => {
+const handleUserLogin = async () => {
     try {
-        const resoponse = await axios.post('/register' , userRegisterData)
-        console.log(resoponse.data);
+        refLoginForm.value?.validate().then(async (res) => {
+            if(res.valid){
+                const resoponse = await axios.post('/login', userLoginData.value)
+                if(resoponse){
+                    localStorage.setItem('loginToken',resoponse.data.access_token)
+                    useNuxtApp().$toast.success('Logged in successfully!!');
+                    refLoginForm.value?.reset()
+                    refLoginForm.value?.resetValidation()
+                    emits('handleDialogClose', false)
+                }   
+            }
+        })
     } catch (error) {
         console.log(error);
     }
 }
 
+const handleUserRegister = async () => {
+    try {
+        refSignupForm.value?.validate().then(async (res) => {
+            if (res.valid) {
+                const resoponse = await axios.post('/register', userRegisterData.value)
+                if (resoponse) {
+                    refSignupForm.value?.reset()
+                    refSignupForm.value?.resetValidation()
+                    tab.value = "LogIn"
+                }
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
 </script>
 
 <template>
@@ -46,11 +78,11 @@ const handleUserRegister = async () => {
                 <VCardText>
                     <VWindow v-model="tab">
                         <VWindowItem value="LogIn" class="mb-6">
-                            <VForm v-model="isLoginFormValid" ref="refLoginForm">
+                            <VForm v-model="isLoginFormValid" ref="refLoginForm" @submit.prevent="handleUserLogin">
                                 <div>
-                                    <VTextField :rules="[emailValidator, requiredValidator]" variant="underlined"
+                                    <VTextField v-model="userLoginData.email" :rules="[emailValidator, requiredValidator]" variant="underlined"
                                         label="Email" />
-                                    <VTextField :rules="[requiredValidator]" variant="underlined" label="password"
+                                    <VTextField v-model="userLoginData.password" :rules="[requiredValidator]" variant="underlined" label="password"
                                         type="password" />
                                     <VBtn block type="submit" size="large">Log in</VBtn>
                                 </div>
@@ -67,13 +99,19 @@ const handleUserRegister = async () => {
                         <VWindowItem value="SignUp">
                             <VForm v-model="isSignupFormValid" ref="refSignupForm" @submit.prevent="handleUserRegister">
                                 <div>
-                                    <VTextField :rules="[requiredValidator]" variant="underlined" label="First Name" />
-                                    <VTextField :rules="[requiredValidator]" variant="underlined" label="Last Name" />
-                                    <VTextField :rules="[emailValidator, requiredValidator]" variant="underlined"
+                                    <VTextField v-model="userRegisterData.first_name" :rules="[requiredValidator]"
+                                        variant="underlined" label="First Name" />
+                                    <VTextField v-model="userRegisterData.last_name" :rules="[requiredValidator]"
+                                        variant="underlined" label="Last Name" />
+                                    <VTextField v-model="userRegisterData.email"
+                                        :rules="[emailValidator, requiredValidator]" variant="underlined"
                                         label="Email" />
-                                    <VTextField :rules="[requiredValidator]" variant="underlined" label="password"
+                                    <VTextField v-model="userRegisterData.password" :rules="[requiredValidator]"
+                                        variant="underlined" label="Password" type="password" />
+                                    <VTextField v-model="userRegisterData.password_confirmation"
+                                        :rules="[requiredValidator]" variant="underlined" label="Confirm Password"
                                         type="password" />
-                                    <VBtn block type="sumbit" size="large">Sign Up</VBtn>
+                                    <VBtn block type="submit" size="large">Sign Up</VBtn>
                                 </div>
                                 <VDivider class="my-4" />
                                 <div>

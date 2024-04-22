@@ -9,7 +9,7 @@ const props = defineProps<{
 <template>
     <div>
         <div>
-            <VCard class="pa-4" min-width="300px" variant="tonal">
+            <VCard class="pa-4" min-width="300px" variant="elevated">
                 <VCardText>
                     <div>
                         <VAvatar :color="props.job.company_logo ? '' : 'primary'"

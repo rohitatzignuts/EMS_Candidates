@@ -14,7 +14,7 @@ onMounted(() => {
 <template>
     <div class="featured text-center pa-8">
         <div class="mt-16">
-            <h1>Featured Jobs</h1>
+            <h1 class="text-h3 font-weight-bold pb-4">Featured Jobs</h1>
             <p>
                 At vero eos et accusamus et iusto odio dignissimos ducimus qui
                 blanditiis praesentium voluptatum <br />

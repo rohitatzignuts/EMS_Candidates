@@ -1,15 +1,13 @@
-import axios from "axios";
+// plugins/axios.js
+import axios from 'axios';
 
-export default defineNuxtPlugin( async () => {
-    // const token = localStorage.getItem('token')
-    axios.defaults.baseURL = "http://127.0.0.1:8000/api/"
+export default defineNuxtPlugin(async () => {
+    axios.defaults.baseURL = 'http://127.0.0.1:8000/api/';
     axios.interceptors.request.use(function (config) {
-        config.headers['token'] = "7|aJ9PIQ7txyMKWu4eFnU8Tjq8a2BwzQfeAGyYBCIK1a42a8e9"
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers['token'] = token;
+        }
         return config;
     });
-    return {
-        provide : {
-            axios : axios,
-        }
-    }
-})
+});
