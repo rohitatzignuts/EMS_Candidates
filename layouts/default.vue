@@ -1,5 +1,9 @@
 <script setup lang="ts">
+const isDialogOpen = ref<boolean>(false)
 
+const handleAuth = () => {
+    isDialogOpen.value = true
+}
 </script>
 
 <template>
@@ -9,9 +13,9 @@
             <VAppBar color="#FA7070">
                 <VContainer>
                     <div class="d-flex justify-space-between align-center">
-                        <h1>Job HUNT</h1>
+                        <NuxtLink to="/" ><h1>Job HUNT</h1></NuxtLink>
                         <div>
-                            <VBtn prepend-icon="mdi-login" variant="tonal">sign in</VBtn>
+                            <VBtn prepend-icon="mdi-login" variant="tonal" @click="handleAuth">sign in</VBtn>
                         </div>
                     </div>
                 </VContainer>
@@ -22,11 +26,14 @@
                 </div>
             </VMain>
         </VLayout>
+        <Footer />
+        <AuthDialogs :is-dialog-open="isDialogOpen" @handle-dialog-close="isDialogOpen = false"/>
     </div>
 </template>
 
 <style scoped>
-.main {
-    background-color: #FEFDED;
+a{
+    text-decoration: none;
+    color: unset;
 }
 </style>

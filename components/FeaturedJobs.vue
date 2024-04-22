@@ -14,26 +14,32 @@ onMounted(() => {
 <template>
     <div class="featured text-center pa-8">
         <div class="mt-16">
-        <h1>Featured Jobs</h1>
-        <p>
-            At vero eos et accusamus et iusto odio dignissimos ducimus qui
-            blanditiis praesentium voluptatum <br />
-            deleniti atque corrupti quos dolores
-        </p>
+            <h1>Featured Jobs</h1>
+            <p>
+                At vero eos et accusamus et iusto odio dignissimos ducimus qui
+                blanditiis praesentium voluptatum <br />
+                deleniti atque corrupti quos dolores
+            </p>
         </div>
-        <VContainer>
-        <VDivider class="my-4" />
-        <VRow>
-            <VCol v-for="job in allJobs" :key="n">
-            <FeaturedJobsCard :job="job"/>
-            </VCol>
-        </VRow>
+        <VContainer class="mb-12">
+            <VDivider class="my-4" />
+            <VRow>
+                <VCol v-for="job in allJobs" :key="job.id">
+                    <NuxtLink :to="`job-${job.id}`">
+                        <FeaturedJobsCard :job="job" />
+                    </NuxtLink>
+                </VCol>
+            </VRow>
         </VContainer>
     </div>
 </template>
 
 <style scoped>
 .featured {
-    min-height: calc(100vh - 64px);
+    min-height: max-content
+}
+a{
+    color: unset;
+    text-decoration: none;
 }
 </style>

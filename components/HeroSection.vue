@@ -9,9 +9,10 @@
                 <div>
                     <VBtn color="#C6EBC5" rounded size="small" variant="flat">Get Your Hot Jobs</VBtn>
                 </div>
-                <h1 class="text-h2 text-xm-h6 font-weight-bold" color="#FA7070">Find the great jobs<br/>
+                <h1 class="text-h2 text-xm-h6 font-weight-bold" color="#FA7070">Find the great jobs<br />
                     offer for you</h1>
-                <p class="text-h6">Getting a new job is never easy. Check what new jobs we have in store for you on Job Stock.</p>
+                <p class="text-h6">Getting a new job is never easy. Check what new jobs we have in store for you on Job
+                    Stock.</p>
             </div>
         </section>
     </div>
@@ -30,7 +31,8 @@
     text-align: center;
     font-size: 2rem;
 }
-h1{
+
+h1 {
     line-height: 1.25;
     color: #FA7070;
 }

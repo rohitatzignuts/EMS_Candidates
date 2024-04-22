@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { ref } from "vue";
+
 export const useJobStore = defineStore('jobs' , () => {
 
     const allJobs = ref<Array<object>>([])
@@ -12,7 +13,6 @@ export const useJobStore = defineStore('jobs' , () => {
         } catch (error) {
             console.log(error)
         }
-        
     }
     return {
         getAllJobs,allJobs
