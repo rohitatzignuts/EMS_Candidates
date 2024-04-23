@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import axios from 'axios';
+import { useRouter } from 'vue-router'
 
 const isDialogOpen = ref<boolean>(false)
 const loginToken = ref(process.client ? localStorage.getItem('loginToken') : null)
+const router = useRouter()
 
 const handleAuth = () => {
     isDialogOpen.value = true
@@ -18,6 +20,7 @@ const handleLogout = async () => {
                 },
             })
         if (response) {
+            router.push({ path: "/" });
             useNuxtApp().$toast.info('Logged out successfully!!');
             if (process.client) {
                 localStorage.removeItem('loginToken')
@@ -25,7 +28,9 @@ const handleLogout = async () => {
             }
         }
     } catch (error) {
-        console.log(error);
+        if (error.response) {
+            useNuxtApp().$toast.info(`${error.response.data.message}`);
+        }
     }
 }
 </script>
@@ -43,7 +48,8 @@ const handleLogout = async () => {
                         <div>
                             <VBtn v-if="!loginToken" prepend-icon="mdi-login" variant="tonal" @click="handleAuth">sign
                                 in</VBtn>
-                            <VBtn v-if="loginToken" prepend-icon="mdi-login" variant="tonal" @click="handleLogout">Log Out</VBtn>
+                            <VBtn v-if="loginToken" prepend-icon="mdi-login" variant="tonal" @click="handleLogout">Log
+                                Out</VBtn>
                         </div>
                     </div>
                 </VContainer>

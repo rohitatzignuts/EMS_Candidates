@@ -32,19 +32,22 @@ const userLoginData = ref({
 const handleUserLogin = async () => {
     try {
         refLoginForm.value?.validate().then(async (res) => {
-            if(res.valid){
+            if (res.valid) {
                 const resoponse = await axios.post('/login', userLoginData.value)
-                if(resoponse){
-                    localStorage.setItem('loginToken',resoponse.data.access_token)
-                    useNuxtApp().$toast.success('Logged in successfully!!');
-                    refLoginForm.value?.reset()
-                    refLoginForm.value?.resetValidation()
-                    emits('handleDialogClose', false)
-                }   
+                localStorage.setItem('loginToken', resoponse.data.access_token)
+                localStorage.setItem('userEmail', userLoginData.value.email)
+                useNuxtApp().$toast.success('Logged in successfully!!');
+                refLoginForm.value?.reset()
+                refLoginForm.value?.resetValidation()
+                emits('handleDialogClose', false)
             }
         })
     } catch (error) {
-        console.log(error);
+        if (error.response) {
+            useNuxtApp().$toast.error(`${error.response.data.message}`)
+        } else {
+            useNuxtApp().$toast.error(`Error : ${error}`)
+        }
     }
 }
 
@@ -61,7 +64,11 @@ const handleUserRegister = async () => {
             }
         })
     } catch (error) {
-        console.log(error);
+        if (error.response) {
+            useNuxtApp().$toast.error(`${error.response.data.message}`)
+        } else {
+            useNuxtApp().$toast.error(`Error : ${error}`)
+        }
     }
 }
 </script>
@@ -70,7 +77,7 @@ const handleUserRegister = async () => {
     <div>
         <VDialog :model-value="props.isDialogOpen" persistent max-width="500">
             <VCard color="#FA7070">
-                <h1 class="text-h3 pa-4">Hello, Again !!</h1>
+                <h1 class="text-h4 pa-4">Hello, Again !!</h1>
                 <VTabs v-model="tab">
                     <VTab value="LogIn" class="font-weight-bold">Log In</VTab>
                     <VTab value="SignUp" class="font-weight-bold">Sign Up</VTab>
@@ -80,10 +87,11 @@ const handleUserRegister = async () => {
                         <VWindowItem value="LogIn" class="mb-6">
                             <VForm v-model="isLoginFormValid" ref="refLoginForm" @submit.prevent="handleUserLogin">
                                 <div>
-                                    <VTextField v-model="userLoginData.email" :rules="[emailValidator, requiredValidator]" variant="underlined"
+                                    <VTextField v-model="userLoginData.email"
+                                        :rules="[emailValidator, requiredValidator]" variant="underlined"
                                         label="Email" />
-                                    <VTextField v-model="userLoginData.password" :rules="[requiredValidator]" variant="underlined" label="password"
-                                        type="password" />
+                                    <VTextField v-model="userLoginData.password" :rules="[requiredValidator]"
+                                        variant="underlined" label="password" type="password" />
                                     <VBtn block type="submit" size="large">Log in</VBtn>
                                 </div>
                                 <VDivider class="my-4" />

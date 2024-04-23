@@ -11,9 +11,9 @@ type jobType = {
 }
 
 const router = useRoute()
-const jobId = ref<number>(router.params.id)
+const jobId = ref<number | string>(router.params.id)
 const jobDetails = ref<jobType>({})
-const loginToken = ref(process.client ? localStorage.getItem('loginToken') : null)
+const loginToken = process.client ? localStorage.getItem('loginToken') : null
 const items = [
     {
         title: 'Home',
@@ -30,16 +30,22 @@ const fetchJobById = async () => {
     try {
         const response = await axios.get(`/job/${jobId.value}`, {
             headers: {
-                Authorization: `Bearer ${loginToken.value}`,
+                Authorization: `Bearer ${loginToken}`,
             },
         });
-        if (response) {
-            jobDetails.value = response.data.data
+        jobDetails.value = response.data.data
+    } catch (error: any) {
+        if (error.response) {
+            useNuxtApp().$toast.info(`${error.response.data.message}`);
+        } else {
+            useNuxtApp().$toast.info(`Error : ${error}`);
         }
-    } catch (error) {
-        useNuxtApp().$toast.info(`${error.message}`);
     }
 };
+
+watchEffect(() => {
+    jobId.value
+})
 
 onMounted(() => {
     fetchJobById()

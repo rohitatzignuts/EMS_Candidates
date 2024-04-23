@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
     job: {
+        id?: string | number,
         title: string,
         description: string,
         location: string,
@@ -8,6 +9,11 @@ const props = defineProps<{
         company_name: string,
     }
 }>()
+const isApplyDialogOpen = ref<boolean>(false)
+const loginToken = ref(process.client ? localStorage.getItem('loginToken') : null)
+watchEffect(() => {
+    loginToken.value
+})
 </script>
 
 <template>
@@ -23,8 +29,13 @@ const props = defineProps<{
                     <p class="text-body-1 mt-6">{{ props.job.description }}</p>
                 </div>
                 <div class="mt-12">
-                    <VBtn class="me-4" variant="flat" color="#FA7070" size="large">Apply Job</VBtn>
-                    <VBtn variant="flat" color="#7272724d" size="large">Save Job</VBtn>
+                    <VBtn class="me-4" variant="flat" color="#FA7070" size="large" @click="isApplyDialogOpen = true"
+                        :disabled="!loginToken">Apply Job</VBtn>
+                    <VBtn variant="flat" color="#7272724d" size="large" :disabled="!loginToken">Save Job</VBtn>
+                    <br>
+                    <div v-if="!loginToken" class="mt-7 signInText">
+                        <strong>**sign in to apply**</strong>
+                    </div>
                 </div>
                 <div class="d-flex justify-space-start ga-12 mt-12">
                     <div class="d-flex align-center ga-1">
@@ -42,5 +53,18 @@ const props = defineProps<{
                 </div>
             </VContainer>
         </div>
+        <ApplyJobDialog :isDialogOpen="isApplyDialogOpen" @handleDialogClose="isApplyDialogOpen = false" />
     </div>
 </template>
+
+<style scoped>
+.signInText{
+    background-color: #FA7070;
+    height: 0.75rem;
+    width: max-content;
+    opacity: 0.75;
+}
+strong {
+    position: relative;
+}
+</style>
