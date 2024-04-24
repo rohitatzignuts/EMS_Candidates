@@ -1,14 +1,19 @@
 <script setup lang="ts">
-import axios from 'axios';
-import { useRouter } from 'vue-router'
+import axios from "axios";
+import { useRouter } from "vue-router";
 
-const isDialogOpen = ref<boolean>(false)
-const loginToken = ref(process.client ? localStorage.getItem('loginToken') : null)
-const router = useRouter()
-
+const isDialogOpen = ref<boolean>(false);
+const loginToken = ref(
+    process.client ? localStorage.getItem("loginToken") : null
+);
+const router = useRouter();
+const items = [
+    { title: "Applications", to: '/applications' },
+    { title: "Saved Jobs", to: '/savedJobs' },
+];
 const handleAuth = () => {
-    isDialogOpen.value = true
-}
+    isDialogOpen.value = true;
+};
 const handleLogout = async () => {
     try {
         const response = await axios.post(
@@ -18,21 +23,22 @@ const handleLogout = async () => {
                 headers: {
                     Authorization: `Bearer ${loginToken.value}`,
                 },
-            })
+            }
+        );
         if (response) {
             router.push({ path: "/" });
-            useNuxtApp().$toast.info('Logged out successfully!!');
+            useNuxtApp().$toast.info("Logged out successfully!!");
             if (process.client) {
-                localStorage.removeItem('loginToken')
-                loginToken.value = null
+                localStorage.removeItem("loginToken");
+                loginToken.value = null;
             }
         }
-    } catch (error) {
+    } catch (error: any) {
         if (error.response) {
-            useNuxtApp().$toast.info(`${error.response.data.message}`);
+            useNuxtApp().$toast.error(`${error.response.data.message}`);
         }
     }
-}
+};
 </script>
 
 <template>
@@ -45,11 +51,32 @@ const handleLogout = async () => {
                         <NuxtLink to="/">
                             <h1>Job HUNT</h1>
                         </NuxtLink>
-                        <div>
-                            <VBtn v-if="!loginToken" prepend-icon="mdi-login" variant="tonal" @click="handleAuth">sign
-                                in</VBtn>
-                            <VBtn v-if="loginToken" prepend-icon="mdi-login" variant="tonal" @click="handleLogout">Log
-                                Out</VBtn>
+                        <div class="d-flex justify-space-between align-center ga-4">
+                            <div>
+                                <VBtn v-if="!loginToken" prepend-icon="mdi-login" variant="tonal" @click="handleAuth">
+                                    sign
+                                    in</VBtn>
+                                <VBtn v-if="loginToken" prepend-icon="mdi-login" variant="tonal" @click="handleLogout">
+                                    Log
+                                    Out</VBtn>
+                            </div>
+                            <div>
+                                <VMenu>
+                                    <template v-slot:activator="{ props }">
+                                        <VBtn v-bind="props" variant="text" rounded="0">
+                                            <VIcon size="large" class="pa-0 text-h4">mdi-menu</VIcon>
+                                        </VBtn>
+                                    </template>
+                                    <VList>
+                                        <VListItem v-for="(item, index) in items" :key="index" :value="index"
+                                            background-color="#FA7070">
+                                            <NuxtLink :to="item.to">
+                                                <VListItemTitle>{{ item.title }}</VListItemTitle>
+                                            </NuxtLink>
+                                        </VListItem>
+                                    </VList>
+                                </VMenu>
+                            </div>
                         </div>
                     </div>
                 </VContainer>

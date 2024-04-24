@@ -1,57 +1,70 @@
 <script setup lang="ts">
-import { emailValidator, requiredValidator } from "../utils/validators";
-import { useRoute } from 'vue-router';
-import axios from 'axios';
+import { requiredValidator } from "../utils/validators";
+import { useRoute } from "vue-router";
+import axios from "axios";
+import type { VForm } from "vuetify/components";
 
 type Application = {
-    job_id: string | number
-    user_email: string,
-    resume: file
-}
+    job_id: string | number;
+    user_email: string | null;
+    resume: string | null;
+};
 
 const props = defineProps<{
-    isDialogOpen: boolean
-}>()
+    isDialogOpen: boolean;
+}>();
 const emits = defineEmits<{
-    (e: 'handleDialogClose', payload: boolean): void
-}>()
+    (e: "handleDialogClose", payload: boolean): void;
+}>();
 
-const router = useRoute()
-const selectedResume = ref<any>()
-const currentjob_id = ref<number | string>(router.params.id)
-const storeduser_email = process.client ? localStorage.getItem('userEmail') : ''
+const router = useRoute();
+const selectedResume = ref<any>();
+const isFormValid = ref<boolean>(false);
+const refForm = ref<VForm>();
+const currentjob_id = ref<number | string>(router.params.id);
+const storeduser_email = process.client
+    ? localStorage.getItem("userEmail")
+    : "";
 const jobApplicationData = ref<Application>({
     job_id: currentjob_id.value,
     user_email: storeduser_email,
-    resume: null
-})
-const loginToken = process.client ? localStorage.getItem('loginToken') : null
+    resume: null,
+});
+const loginToken = process.client ? localStorage.getItem("loginToken") : null;
 
-const selectResume = (e) => {
-    selectedResume.value = e.target.files[0]
-}
+const selectResume = (e: any) => {
+    selectedResume.value = e.target.files[0];
+};
 
 const handleApplicationSubmit = async () => {
     try {
-        const data = new FormData();
-        data.append('resume', selectedResume.value)
-        data.append('job_id', jobApplicationData.value.job_id)
-        data.append('user_email', jobApplicationData.value.user_email)
-        const response = await axios.post(`/job-${currentjob_id.value}/apply`, data, {
-            headers: {
-                Authorization: `Bearer ${loginToken}`,
-            },
-        })
-        useNuxtApp().$toast.success(`${response.data.message}`)
-        emits('handleDialogClose', false)
-    } catch (error) {
+        refForm.value?.validate().then(async (res) => {
+            if (res.valid) {
+                const data = new FormData();
+                data.append("resume", selectedResume.value);
+                data.append("job_id", jobApplicationData.value.job_id);
+                data.append("user_email", jobApplicationData.value.user_email);
+                const response = await axios.post(
+                    `/job-${currentjob_id.value}/apply`,
+                    data,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${loginToken}`,
+                        },
+                    }
+                );
+                useNuxtApp().$toast.success(`${response.data.message}`);
+                emits("handleDialogClose", false);
+            }
+        });
+    } catch (error: any) {  
         if (error.response) {
-            useNuxtApp().$toast.error(`${error.response.data.message}`)
+            useNuxtApp().$toast.error(`${error.response.data.message}`);
         } else {
-            useNuxtApp().$toast.error(`Error : ${error}`)
+            useNuxtApp().$toast.error(`Error : ${error}`);
         }
     }
-}
+};
 </script>
 
 <template>
@@ -61,13 +74,14 @@ const handleApplicationSubmit = async () => {
                 <h1 class="text-h4 pa-4">Ready To Apply?</h1>
                 <VCardText>
                     <div>
-                        <VForm enctype="multipart/form-data" @submit.prevent="handleApplicationSubmit">
+                        <VForm v-model="isFormValid" ref="refForm" enctype="multipart/form-data"
+                            @submit.prevent="handleApplicationSubmit">
                             <VTextField v-model="jobApplicationData.user_email" disabled variant="underlined"
                                 label="Email" />
-                            <VFileInput :rules=[requiredValidator] accept="pdf|image" variant="underlined"
+                            <VFileInput :rules="[requiredValidator]" accept="pdf|image" variant="underlined"
                                 label="Resume" density="default" @change="selectResume" />
                             <div class="mb-4">
-                                <VBtn block type="submit" variant="flat" size="large">Submit</VBtn>
+                                <VBtn block class="mt-2" type="submit" variant="flat" size="large">Submit</VBtn>
                             </div>
                         </VForm>
                     </div>

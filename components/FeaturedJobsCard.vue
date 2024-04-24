@@ -1,15 +1,22 @@
 <script setup lang="ts">
-import { avatarText } from "../utils.ts";
+import { avatarText } from "../utils";
 
 const props = defineProps<{
-    job: Object;
+    job: {
+        id : number,
+        company_logo : string,
+        company_name : string,
+        title : string,
+        location : string,
+        pay : string,
+    }
 }>();
 </script>
 
 <template>
     <div>
         <div>
-            <VCard class="pa-4" min-width="300px" variant="elevated">
+            <VCard class="pa-4" min-height="auto" min-width="300px" variant="elevated">
                 <VCardText>
                     <div>
                         <VAvatar :color="props.job.company_logo ? '' : 'primary'"

@@ -22,7 +22,6 @@ onMounted(() => {
             </p>
         </div>
         <VContainer class="mb-12">
-            <VDivider class="my-4" />
             <VRow>
                 <VCol v-for="job in allJobs" :key="job.id">
                     <NuxtLink :to="`job-${job.id}`">

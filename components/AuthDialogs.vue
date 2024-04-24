@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { VForm } from "vuetify/components";
-import { emailValidator, requiredValidator } from "../utils/validators";
+import { emailValidator, requiredValidator, confirmedValidator } from "../utils/validators";
 import axios from "axios";
 
 const refLoginForm = ref<VForm>();
@@ -33,8 +33,8 @@ const handleUserLogin = async () => {
     try {
         refLoginForm.value?.validate().then(async (res) => {
             if (res.valid) {
-                const resoponse = await axios.post('/login', userLoginData.value)
-                localStorage.setItem('loginToken', resoponse.data.access_token)
+                const response = await axios.post('/login', userLoginData.value)
+                localStorage.setItem('loginToken', response.data.access_token)
                 localStorage.setItem('userEmail', userLoginData.value.email)
                 useNuxtApp().$toast.success('Logged in successfully!!');
                 refLoginForm.value?.reset()
@@ -42,7 +42,8 @@ const handleUserLogin = async () => {
                 emits('handleDialogClose', false)
             }
         })
-    } catch (error) {
+    } catch (error: any) {
+        alert(error)
         if (error.response) {
             useNuxtApp().$toast.error(`${error.response.data.message}`)
         } else {
@@ -51,19 +52,20 @@ const handleUserLogin = async () => {
     }
 }
 
+
 const handleUserRegister = async () => {
     try {
         refSignupForm.value?.validate().then(async (res) => {
             if (res.valid) {
-                const resoponse = await axios.post('/register', userRegisterData.value)
-                if (resoponse) {
+                const response = await axios.post('/register', userRegisterData.value)
+                if (response) {
                     refSignupForm.value?.reset()
                     refSignupForm.value?.resetValidation()
                     tab.value = "LogIn"
                 }
             }
         })
-    } catch (error) {
+    } catch (error: any) {
         if (error.response) {
             useNuxtApp().$toast.error(`${error.response.data.message}`)
         } else {
@@ -117,8 +119,8 @@ const handleUserRegister = async () => {
                                     <VTextField v-model="userRegisterData.password" :rules="[requiredValidator]"
                                         variant="underlined" label="Password" type="password" />
                                     <VTextField v-model="userRegisterData.password_confirmation"
-                                        :rules="[requiredValidator]" variant="underlined" label="Confirm Password"
-                                        type="password" />
+                                        :rules="[requiredValidator, confirmedValidator(userRegisterData.password, userRegisterData.password_confirmation)]"
+                                        variant="underlined" label="Confirm Password" type="password" />
                                     <VBtn block type="submit" size="large">Sign Up</VBtn>
                                 </div>
                                 <VDivider class="my-4" />
