@@ -37,12 +37,15 @@ onMounted(() => {
                 <div class="text-h4 font-weight-medium appliedJobsText mb-6"><mark class="appliedJobsSpan">Jobs You Have
                         Applied For...</mark>
                 </div>
-                <div class="appliedJobsContainer">
+                <div v-if="userAppliedJobs.length > 0" class="appliedJobsContainer">
                     <VRow>
                         <VCol v-for="job in userAppliedJobs" :id="job.id" cols="12">
                             <ApplicationCard :job="job" />
                         </VCol>
                     </VRow>
+                </div>
+                <div v-else>
+                    <p class="text-h6">you haven't applied for any jobs yet....</p>
                 </div>
             </div>
         </VContainer>
@@ -54,7 +57,7 @@ mark {
     display: inline-block;
     line-height: 0em;
     padding-bottom: 0.5em;
-    background-color: rgb(250, 112, 112,0.75);  
+    background-color: rgb(250, 112, 112, 0.75);
 }
 
 .savedJobs {
@@ -78,12 +81,12 @@ mark {
 }
 
 .appliedJobsContainer::-webkit-scrollbar-thumb {
-    background:  rgb(250, 112, 112, 0.75);
+    background: rgb(250, 112, 112, 0.75);
     /* Color of the scrollbar handle */
 }
 
 .appliedJobsContainer::-webkit-scrollbar-thumb:hover {
-    background:rgb(250, 112, 112, 0.75);
+    background: rgb(250, 112, 112, 0.75);
     /* Color of the scrollbar handle on hover */
 }
 </style>

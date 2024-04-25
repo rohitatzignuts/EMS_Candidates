@@ -7,7 +7,7 @@ export const useJobStore = defineStore("jobs", () => {
   const loginToken = process.client ? localStorage.getItem("loginToken") : null;
   const userEmail = process.client ? localStorage.getItem("userEmail") : null;
   const userAppliedJobs = ref<Array<object>>([]);
-  const savedJobsArray: object[] = [];
+  const savedJobsArray = ref<Array<object>>([]);
 
   const getAllJobs = async () => {
     try {
@@ -34,20 +34,35 @@ export const useJobStore = defineStore("jobs", () => {
       console.log(error);
     }
   };
+
   const handleJobSave = (job: object) => {
     try {
       const jobId = job.id;
-      if (savedJobsArray.some((savedJob) => savedJob?.id === jobId)) {
+      if (savedJobsArray.value.some((savedJob) => savedJob?.id === jobId)) {
         useNuxtApp().$toast.info("Job already saved! 👍");
       } else {
-        savedJobsArray.push(job);
+        savedJobsArray.value.push(job);
         if (process.client) {
-          localStorage.setItem("savedJobs", JSON.stringify(savedJobsArray));
+          localStorage.setItem(
+            "savedJobs",
+            JSON.stringify(savedJobsArray.value)
+          );
         }
         useNuxtApp().$toast.success("Job saved successfully! 🙌");
       }
     } catch (error) {
       useNuxtApp().$toast.error("Failed to save the job 😓");
+    }
+  };
+
+  const handleJobRemove = (id: number) => {
+    try {
+      savedJobsArray.value = savedJobsArray.value.filter(
+        (job) => job.id !== id
+      );
+      localStorage.setItem("savedJobs", JSON.stringify(savedJobsArray.value));
+    } catch (error) {
+      useNuxtApp().$toast.error("Failed to remove the job 😓");
     }
   };
 
@@ -57,6 +72,7 @@ export const useJobStore = defineStore("jobs", () => {
     handleJobSave,
     allJobs,
     getUserAppliedJobs,
+    handleJobRemove,
     userAppliedJobs,
   };
 });

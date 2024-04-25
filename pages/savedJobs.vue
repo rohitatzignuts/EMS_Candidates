@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import { useJobStore } from "../store/useJobStore";
-import { storeToRefs } from "pinia";
-import { onMounted } from 'vue';
-
-const jobStore = useJobStore();
-const { userAppliedJobs } = storeToRefs(jobStore);
-const { getUserAppliedJobs } = jobStore;
 const router = useRoute()
-const savedJobs = process.client ? JSON.parse(localStorage.getItem('savedJobs') || '[]') : [];
-console.log(savedJobs);
+
+const savedJobs = computed(() => {
+    return process.client ? JSON.parse(localStorage.getItem('savedJobs') || '[]') : [];
+});
 
 const items = [
     {
@@ -23,9 +18,7 @@ const items = [
         to: router.fullPath,
     },
 ]
-onMounted(() => {
-    getUserAppliedJobs()
-})
+
 </script>
 
 <template>
@@ -40,12 +33,15 @@ onMounted(() => {
                 <div class="text-h4 font-weight-medium appliedJobsText mb-6"><mark class="appliedJobsSpan">Jobs You Have
                         Saved...</mark>
                 </div>
-                <div class="appliedJobsContainer">
+                <div v-if="savedJobs.length > 0" class="appliedJobsContainer">
                     <VRow>
                         <VCol v-for="job in savedJobs" :id="job.id" cols="12">
                             <ApplicationCard :job="job" />
                         </VCol>
                     </VRow>
+                </div>
+                <div v-else>
+                    <p class="text-h6">you haven't saved any jobs yet....</p>
                 </div>
             </div>
         </VContainer>

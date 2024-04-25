@@ -5,13 +5,15 @@
     <div>
         <main>
             <VContainer>
-                <slot />
+                <slot />    
             </VContainer>
         </main>
     </div>
 </template>
 <style scoped>
 main {
-    height: 100vh;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
 }
 </style>

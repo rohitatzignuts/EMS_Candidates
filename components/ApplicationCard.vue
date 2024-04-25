@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { avatarText } from "../utils";
 import { useRoute } from 'vue-router';
+import {useJobStore} from '~/store/useJobStore'
 
 const props = defineProps<{
     job: {
@@ -16,8 +17,11 @@ const props = defineProps<{
         status: string
     }
 }>();
-const statusChipColor = (value: string) => value === 'Accepted' ? 'success' : value === 'Rejected' ? 'error' : 'warning';
+
 const router = useRoute()
+const jobStore = useJobStore()
+const {handleJobRemove} = jobStore
+const statusChipColor = (value: string) => value === 'Accepted' ? 'success' : value === 'Rejected' ? 'error' : 'warning';
 </script>
 
 <template>
@@ -43,16 +47,20 @@ const router = useRoute()
                     <VCol cols="4" class="text-right">
                         <VChip v-if="router.fullPath === '/applications'" :color="statusChipColor(props.job.status)"
                             variant="tonal" size="large">{{
-                                props.job.status }}
+                            props.job.status }}
                             <VTooltip activator="parent" location="start">
                                 your application is..
                             </VTooltip>
                         </VChip>
-                        <NuxtLink v-else :to="`job-${props.job.id}`">
-                            <VBtn variant="tonal" rounded color="#FA7070">
-                                Apply
-                            </VBtn>
-                        </NuxtLink>
+                        <div v-else>
+                            <NuxtLink :to="`job-${props.job.id}`">
+                                <VBtn variant="flat" rounded color="#C6EBC5">
+                                    Apply
+                                </VBtn>
+                            </NuxtLink>
+                            <VBtn rounded class="ms-2" variant="tonal" color="#FA7070"
+                                @click="handleJobRemove(props.job.id)">remove</VBtn>
+                        </div>
                     </VCol>
                 </VRow>
             </div>

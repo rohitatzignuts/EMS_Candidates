@@ -5,7 +5,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
         // get the token from the localstorage
         const token = localStorage.getItem("loginToken");
         const isAuthenticated = token !== null;
-        // restrict access to user /login and /signup if he is authenticated    s
+        // restrict access to use /login 
         if (
             to.path === "/applications" ||
             to.path === "/savedJobs" 
