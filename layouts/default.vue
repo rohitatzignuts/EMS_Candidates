@@ -1,19 +1,15 @@
 <script setup lang="ts">
 import axios from "axios";
-import { useRouter } from "vue-router";
+import { useAuthStore } from '~/store/useAuthStore'
 
-const isDialogOpen = ref<boolean>(false);
-const loginToken = ref(
-    process.client ? localStorage.getItem("loginToken") : null
-);
-const router = useRouter();
+const authStore = useAuthStore()
+const { loginToken } = authStore
+const isAuthenticated = ref<boolean>(loginToken ? true : false)
 const items = [
     { title: "Applications", to: '/applications' },
     { title: "Saved Jobs", to: '/savedJobs' },
 ];
-const handleAuth = () => {
-    isDialogOpen.value = true;
-};
+
 const handleLogout = async () => {
     try {
         const response = await axios.post(
@@ -21,16 +17,17 @@ const handleLogout = async () => {
             null, // No data to send in the request body
             {
                 headers: {
-                    Authorization: `Bearer ${loginToken.value}`,
+                    Authorization: `Bearer ${loginToken}`,
                 },
             }
         );
         if (response) {
-            router.push({ path: "/" });
+            isAuthenticated.value = false
             useNuxtApp().$toast.info("Logged out successfully!!");
             if (process.client) {
                 localStorage.removeItem("loginToken");
-                loginToken.value = null;
+                localStorage.removeItem("savedJobs");
+                localStorage.removeItem("userEmail");
             }
         }
     } catch (error: any) {
@@ -39,6 +36,10 @@ const handleLogout = async () => {
         }
     }
 };
+
+watchEffect(() => {
+    isAuthenticated.value
+})
 </script>
 
 <template>
@@ -53,25 +54,26 @@ const handleLogout = async () => {
                         </NuxtLink>
                         <div class="d-flex justify-space-between align-center ga-4">
                             <div>
-                                <VBtn v-if="!loginToken" prepend-icon="mdi-login" variant="tonal" @click="handleAuth">
-                                    sign
-                                    in</VBtn>
-                                <VBtn v-if="loginToken" prepend-icon="mdi-login" variant="tonal" @click="handleLogout">
-                                    Log
-                                    Out</VBtn>
+                                <NuxtLink v-if="!isAuthenticated" to="/login">
+                                    <VBtn prepend-icon="mdi-login" variant="tonal">
+                                        sign in</VBtn>
+                                </NuxtLink>
+                                <VBtn v-else prepend-icon="mdi-login" variant="tonal" @click="handleLogout">
+                                    Log Out</VBtn>
                             </div>
                             <div>
-                                <VMenu>
+                                <VMenu v-if="isAuthenticated">
                                     <template v-slot:activator="{ props }">
                                         <VBtn v-bind="props" variant="text" rounded="0">
                                             <VIcon size="large" class="pa-0 text-h4">mdi-menu</VIcon>
                                         </VBtn>
                                     </template>
-                                    <VList>
+                                    <VList id="menu">
                                         <VListItem v-for="(item, index) in items" :key="index" :value="index"
                                             background-color="#FA7070">
                                             <NuxtLink :to="item.to">
-                                                <VListItemTitle>{{ item.title }}</VListItemTitle>
+                                                <VListItemTitle id="menuItems">{{ item.title }}
+                                                </VListItemTitle>
                                             </NuxtLink>
                                         </VListItem>
                                     </VList>
@@ -88,7 +90,6 @@ const handleLogout = async () => {
             </VMain>
         </VLayout>
         <Footer />
-        <AuthDialogs :is-dialog-open="isDialogOpen" @handle-dialog-close="isDialogOpen = false" />
     </div>
 </template>
 
@@ -96,5 +97,13 @@ const handleLogout = async () => {
 a {
     text-decoration: none;
     color: unset;
+}
+
+#menuItems {
+    color: #FA7070;
+}
+
+#menu {
+    background-color: #FEFDED;
 }
 </style>

@@ -42,7 +42,7 @@
             </VRow>
             <VDivider class="my-4" />
             <div>
-                <p>© 2015 - 2023 Job HUNT Zignuts</p>
+                <p>© 2024 Job HUNT Zignuts</p>
             </div>
         </VContainer>
     </div>

@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import type { VForm } from "vuetify/components";
+import { useAuthStore } from "~/store/useAuthStore";
+import { useRouter } from "vue-router";
 import { emailValidator, requiredValidator, confirmedValidator } from "../utils/validators";
 import axios from "axios";
 
-const refLoginForm = ref<VForm>();
-const isLoginFormValid = ref<boolean>(false);
-const refSignupForm = ref<VForm>();
-const isSignupFormValid = ref<boolean>(false);
-const tab = ref<any>(null);
 const props = defineProps<{
     isDialogOpen: boolean;
 }>();
@@ -16,6 +13,14 @@ const emits = defineEmits<{
     (event: "handleDialogClose", payload: boolean): void;
 }>();
 
+const refLoginForm = ref<VForm>();
+const isLoginFormValid = ref<boolean>(false);
+const refSignupForm = ref<VForm>();
+const isSignupFormValid = ref<boolean>(false);
+const tab = ref<any>(null);
+const authStore = useAuthStore()
+const {loginToken} = authStore
+const isAuthenticated = ref<boolean>(loginToken ? true : false)
 const userRegisterData = ref({
     first_name: '',
     last_name: '',
@@ -28,6 +33,7 @@ const userLoginData = ref({
     email: '',
     password: '',
 })
+const router = useRouter();
 
 const handleUserLogin = async () => {
     try {
@@ -36,10 +42,10 @@ const handleUserLogin = async () => {
                 const response = await axios.post('/login', userLoginData.value)
                 localStorage.setItem('loginToken', response.data.access_token)
                 localStorage.setItem('userEmail', userLoginData.value.email)
+                router.push({path : '/'})
                 useNuxtApp().$toast.success('Logged in successfully!!');
                 refLoginForm.value?.reset()
                 refLoginForm.value?.resetValidation()
-                emits('handleDialogClose', false)
             }
         })
     } catch (error: any) {
@@ -51,7 +57,6 @@ const handleUserLogin = async () => {
         }
     }
 }
-
 
 const handleUserRegister = async () => {
     try {
@@ -73,11 +78,11 @@ const handleUserRegister = async () => {
         }
     }
 }
+
 </script>
 
 <template>
     <div>
-        <VDialog :model-value="props.isDialogOpen" persistent max-width="500">
             <VCard color="#FA7070">
                 <h1 class="text-h4 pa-4">Hello, Again !!</h1>
                 <VTabs v-model="tab">
@@ -134,10 +139,7 @@ const handleUserRegister = async () => {
                         </VWindowItem>
                     </VWindow>
                 </VCardText>
-                <VBtn prepend-icon="mdi-close" color="#FEFDED" variant="text" size="large"
-                    @click="emits('handleDialogClose', false)">Close</VBtn>
             </VCard>
-        </VDialog>
     </div>
 </template>
 

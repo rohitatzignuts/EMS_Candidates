@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { avatarText } from "../utils";
+import { useRoute } from 'vue-router';
 
 const props = defineProps<{
     job: {
@@ -7,13 +8,16 @@ const props = defineProps<{
         company_logo: string,
         company_name: string,
         job_title: string,
+        title?: string,
+        location?: string,
         job_location: string,
         job_pay: string,
+        pay?: string,
         status: string
     }
 }>();
 const statusChipColor = (value: string) => value === 'Accepted' ? 'success' : value === 'Rejected' ? 'error' : 'warning';
-
+const router = useRoute()
 </script>
 
 <template>
@@ -33,12 +37,22 @@ const statusChipColor = (value: string) => value === 'Accepted' ? 'success' : va
                         </div>
                         <div>
                             <caption>{{ props.job.company_name }}</caption>
-                            <strong>{{ props.job.job_title }}</strong>
+                            <strong>{{ props.job.job_title ?? props.job.title }}</strong>
                         </div>
                     </VCol>
                     <VCol cols="4" class="text-right">
-                        <VChip :color="statusChipColor(props.job.status)" variant="tonal" size="large">{{
-                                props.job.status }}</VChip>
+                        <VChip v-if="router.fullPath === '/applications'" :color="statusChipColor(props.job.status)"
+                            variant="tonal" size="large">{{
+                                props.job.status }}
+                            <VTooltip activator="parent" location="start">
+                                your application is..
+                            </VTooltip>
+                        </VChip>
+                        <NuxtLink v-else :to="`job-${props.job.id}`">
+                            <VBtn variant="tonal" rounded color="#FA7070">
+                                Apply
+                            </VBtn>
+                        </NuxtLink>
                     </VCol>
                 </VRow>
             </div>
@@ -46,7 +60,7 @@ const statusChipColor = (value: string) => value === 'Accepted' ? 'success' : va
                 <div>
                     <VChip variant="tonal" color="#FA7070">
                         <VIcon start icon="mdi-pin" />
-                        {{ props.job.job_location }}
+                        {{ props.job.job_location ?? props.job.location }}
                     </VChip>
                 </div>
                 <div>
@@ -58,7 +72,7 @@ const statusChipColor = (value: string) => value === 'Accepted' ? 'success' : va
                 <div>
                     <VChip variant="tonal" color="#FA7070">
                         <VIcon start icon="mdi-currency-usd" />
-                        {{ props.job.job_pay }}
+                        {{ props.job.job_pay ?? props.job.pay }}
                     </VChip>
                 </div>
             </div>

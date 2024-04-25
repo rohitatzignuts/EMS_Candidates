@@ -34,10 +34,12 @@ onMounted(() => {
             </div>
 
             <div class="pt-4">
-                <p class="text-h4 font-weight-medium">Jobs You Have Applied For...</p>
+                <div class="text-h4 font-weight-medium appliedJobsText mb-6"><mark class="appliedJobsSpan">Jobs You Have
+                        Applied For...</mark>
+                </div>
                 <div class="appliedJobsContainer">
-                    <VRow class="mt-6">
-                        <VCol v-for="job in userAppliedJobs" :id="job.id" cols="6">
+                    <VRow>
+                        <VCol v-for="job in userAppliedJobs" :id="job.id" cols="12">
                             <ApplicationCard :job="job" />
                         </VCol>
                     </VRow>
@@ -48,9 +50,17 @@ onMounted(() => {
 </template>
 
 <style scoped>
+mark {
+    display: inline-block;
+    line-height: 0em;
+    padding-bottom: 0.5em;
+    background-color: rgb(250, 112, 112,0.75);  
+}
+
 .savedJobs {
     min-height: calc(100vh - 64px);
 }
+
 .appliedJobsContainer {
     height: 75vh;
     overflow-x: hidden;
@@ -63,17 +73,17 @@ onMounted(() => {
 }
 
 .appliedJobsContainer::-webkit-scrollbar-track {
-    background: rgb(250, 112, 112,0.75);
+    background: #FEFDED;
     /* Color of the track */
 }
 
 .appliedJobsContainer::-webkit-scrollbar-thumb {
-    background: #FEFDED;
+    background:  rgb(250, 112, 112, 0.75);
     /* Color of the scrollbar handle */
 }
 
 .appliedJobsContainer::-webkit-scrollbar-thumb:hover {
-    background: #FEFDED;
+    background:rgb(250, 112, 112, 0.75);
     /* Color of the scrollbar handle on hover */
 }
 </style>

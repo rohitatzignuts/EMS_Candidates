@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useJobStore } from '~/store/useJobStore';
+
 const props = defineProps<{
     job: {
         id?: string | number,
@@ -6,11 +8,14 @@ const props = defineProps<{
         description: string,
         location: string,
         pay: string,
+        company_logo : string,
         company_name: string,
     }
 }>()
 const isApplyDialogOpen = ref<boolean>(false)
 const loginToken = ref(process.client ? localStorage.getItem('loginToken') : null)
+const jobStore = useJobStore()
+const { handleJobSave } = jobStore
 watchEffect(() => {
     loginToken.value
 })
@@ -31,10 +36,12 @@ watchEffect(() => {
                 <div class="mt-12">
                     <VBtn class="me-4" variant="flat" color="#FA7070" size="large" @click="isApplyDialogOpen = true"
                         :disabled="!loginToken">Apply Job</VBtn>
-                    <VBtn variant="flat" color="#7272724d" size="large" :disabled="!loginToken">Save Job</VBtn>
+                    <VBtn variant="flat" color="#7272724d" size="large" :disabled="!loginToken"
+                        @click="handleJobSave(props.job)">
+                        Save Job</VBtn>
                     <br>
                     <div v-if="!loginToken" class="mt-7 signInText">
-                        <strong>**sign in to apply**</strong>
+                        <mark>**sign in to apply**</mark>
                     </div>
                 </div>
                 <div class="d-flex justify-space-start ga-12 mt-12">
@@ -58,13 +65,11 @@ watchEffect(() => {
 </template>
 
 <style scoped>
-.signInText{
-    background-color: #FA7070;
-    height: 0.75rem;
-    width: max-content;
+mark {
+    display: inline-block;
+    line-height: 0em;
+    padding-bottom: 0.5em;
+    background-color: rgb(250, 112, 112, 0.75);
     opacity: 0.75;
-}
-strong {
-    position: relative;
 }
 </style>

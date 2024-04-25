@@ -7,6 +7,7 @@ export const useJobStore = defineStore("jobs", () => {
   const loginToken = process.client ? localStorage.getItem("loginToken") : null;
   const userEmail = process.client ? localStorage.getItem("userEmail") : null;
   const userAppliedJobs = ref<Array<object>>([]);
+  const savedJobsArray: object[] = [];
 
   const getAllJobs = async () => {
     try {
@@ -21,7 +22,7 @@ export const useJobStore = defineStore("jobs", () => {
     try {
       const response = await axios.get("applications/status", {
         params: {
-          userEmail
+          userEmail,
         },
         headers: {
           Authorization: `Bearer ${loginToken}`,
@@ -33,9 +34,27 @@ export const useJobStore = defineStore("jobs", () => {
       console.log(error);
     }
   };
+  const handleJobSave = (job: object) => {
+    try {
+      const jobId = job.id;
+      if (savedJobsArray.some((savedJob) => savedJob?.id === jobId)) {
+        useNuxtApp().$toast.info("Job already saved! 👍");
+      } else {
+        savedJobsArray.push(job);
+        if (process.client) {
+          localStorage.setItem("savedJobs", JSON.stringify(savedJobsArray));
+        }
+        useNuxtApp().$toast.success("Job saved successfully! 🙌");
+      }
+    } catch (error) {
+      useNuxtApp().$toast.error("Failed to save the job 😓");
+    }
+  };
 
   return {
     getAllJobs,
+    savedJobsArray,
+    handleJobSave,
     allJobs,
     getUserAppliedJobs,
     userAppliedJobs,

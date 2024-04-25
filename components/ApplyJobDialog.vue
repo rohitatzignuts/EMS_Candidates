@@ -38,26 +38,25 @@ const selectResume = (e: any) => {
 
 const handleApplicationSubmit = async () => {
     try {
-        refForm.value?.validate().then(async (res) => {
-            if (res.valid) {
-                const data = new FormData();
-                data.append("resume", selectedResume.value);
-                data.append("job_id", jobApplicationData.value.job_id);
-                data.append("user_email", jobApplicationData.value.user_email);
-                const response = await axios.post(
-                    `/job-${currentjob_id.value}/apply`,
-                    data,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${loginToken}`,
-                        },
-                    }
-                );
-                useNuxtApp().$toast.success(`${response.data.message}`);
-                emits("handleDialogClose", false);
-            }
-        });
-    } catch (error: any) {  
+        const res = await refForm.value?.validate();
+        if (res.valid) {
+            const data = new FormData();
+            data.append("resume", selectedResume.value);
+            data.append("job_id", jobApplicationData.value.job_id);
+            data.append("user_email", jobApplicationData.value.user_email);
+            const response = await axios.post(
+                `/job-${currentjob_id.value}/apply`,
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${loginToken}`,
+                    },
+                }
+            );
+            useNuxtApp().$toast.success(`${response.data.message}`);
+            emits("handleDialogClose", false);
+        }
+    } catch (error:any) {
         if (error.response) {
             useNuxtApp().$toast.error(`${error.response.data.message}`);
         } else {
@@ -65,6 +64,7 @@ const handleApplicationSubmit = async () => {
         }
     }
 };
+
 </script>
 
 <template>

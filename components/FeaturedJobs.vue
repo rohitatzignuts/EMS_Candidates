@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 
 const jobStore = useJobStore();
 const { allJobs } = storeToRefs(jobStore);
-const { getAllJobs } = jobStore;
+const { getAllJobs,handleJobSave } = jobStore;
 
 onMounted(() => {
     getAllJobs();
@@ -24,9 +24,7 @@ onMounted(() => {
         <VContainer class="mb-12">
             <VRow>
                 <VCol v-for="job in allJobs" :key="job.id">
-                    <NuxtLink :to="`job-${job.id}`">
-                        <FeaturedJobsCard :job="job" />
-                    </NuxtLink>
+                        <FeaturedJobsCard :job="job" @handle-save-job="handleJobSave(job)"/>
                 </VCol>
             </VRow>
         </VContainer>
