@@ -10,6 +10,7 @@ const props = defineProps<{
         pay: string,
         company_logo : string,
         company_name: string,
+        is_trending? : number
     }
 }>()
 const isApplyDialogOpen = ref<boolean>(false)
@@ -24,9 +25,12 @@ watchEffect(() => {
 <template>
     <div>
         <div>
-            <VContainer class="text-left py-10">
+            <VContainer class="text-left py-5">
                 <div>
-                    <VChip color="#FA7070" variant="flat">Full Time</VChip>
+                    <div>
+                        <VChip color="#FA7070" variant="flat" class="me-2">Full Time</VChip>
+                        <VChip v-if="props.job.is_trending === 1" color="#C6EBC5" variant="flat">Trending🔥</VChip>
+                    </div>
                     <p class="text-h3 font-weight-bold py-2">{{ props.job.title }}</p>
                     <span class="text-body-1">
                         <VIcon icon="mdi-map-marker" color="#FA7070" />{{ props.job.location }}

@@ -1,31 +1,22 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
-import axios from "axios"
+import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
+import axios from "axios";
 
 type jobType = {
-    title: string,
-    description: string,
-    location: string,
-    pay: string,
-    company_name: string,
-}
+    title: string;
+    description: string;
+    location: string;
+    pay: string;
+    company_name: string;
+};
 
-const router = useRoute()
-const jobId = ref<number | string>(router.params.id)
-const jobDetails = ref<jobType>({})
-const loginToken = process.client ? localStorage.getItem('loginToken') : null
-const items = [
-    {
-        title: 'Home',
-        disabled: false,
-        to: '/',
-    },
-    {
-        title: (router.fullPath).toString().substring(1),
-        disabled: true,
-        to: router.fullPath,
-    },
-]
+const router = useRoute();
+const mainRouter = useRouter();
+const jobId = ref<number | string>(router.params.id);
+const jobDetails = ref<jobType>({});
+const loginToken = process.client ? localStorage.getItem("loginToken") : null;
+
 const fetchJobById = async () => {
     try {
         const response = await axios.get(`/job/${jobId.value}`, {
@@ -33,7 +24,7 @@ const fetchJobById = async () => {
                 Authorization: `Bearer ${loginToken}`,
             },
         });
-        jobDetails.value = response.data.data
+        jobDetails.value = response.data.data;
     } catch (error: any) {
         if (error.response) {
             useNuxtApp().$toast.info(`${error.response.data.message}`);
@@ -44,20 +35,20 @@ const fetchJobById = async () => {
 };
 
 watchEffect(() => {
-    jobId.value
-})
+    jobId.value;
+});
 
 onMounted(() => {
-    fetchJobById()
-})
+    fetchJobById();
+});
 </script>
 
 <template>
     <div class="jobOverview">
         <div>
             <VContainer>
-                <v-breadcrumbs :items="items" divider="/"
-                    class="px-0 text-h6 font-italic text-decoration-underline"></v-breadcrumbs>
+                <VBtn variant="text" class="text-h6 font-italic px-0" prepend-icon="mdi-arrow-left-thin"
+                    @click="mainRouter.go(-1)">back</VBtn>
             </VContainer>
         </div>
         <div>

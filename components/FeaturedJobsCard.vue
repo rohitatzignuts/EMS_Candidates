@@ -1,27 +1,32 @@
 <script setup lang="ts">
 import { avatarText } from "../utils";
 
+
 const props = defineProps<{
     job: {
-        id: number,
-        company_logo: string,
-        company_name: string,
-        title: string,
-        location: string,
-        pay: string,
-    }
+        id: number;
+        company_logo: string;
+        company_name: string;
+        title: string;
+        location: string;
+        pay: string;
+    };
 }>();
 const emits = defineEmits<{
-    (e: 'handleSaveJob', payload: object): void
-}>()
-const loginToken = ref(process.client ? localStorage.getItem('loginToken') : null)
-
+    (e: "handleSaveJob", payload: object): void;
+}>();
+let loginToken = ref(process.client
+    ? localStorage.getItem("loginToken")
+    : null)
+watchEffect(() => {
+    loginToken.value
+})
 </script>
 
 <template>
     <div>
         <div>
-            <VCard class="pa-4" min-height="auto" min-width="300px" variant="elevated">
+            <VCard class="pa-4" min-width="300px" variant="elevated">
                 <VCardText>
                     <div>
                         <NuxtLink :to="`job-${props.job.id}`">
@@ -47,9 +52,7 @@ const loginToken = ref(process.client ? localStorage.getItem('loginToken') : nul
                     <div class="text-h6 font-weight-bold">
                         ${{ props.job.pay }}/<span class="text-subtitle-2">Year</span>
                     </div>
-                    <div>
-
-                    </div>
+                    <div></div>
                     <VBtn :disabled="!loginToken" variant="tonal" color="#FA7070"
                         @click="emits('handleSaveJob', props.job)">Save Job
                     </VBtn>
@@ -67,6 +70,6 @@ a {
 }
 
 a:hover {
-    color: #FA7070;
+    color: #fa7070;
 }
 </style>

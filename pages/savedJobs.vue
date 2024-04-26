@@ -1,23 +1,12 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
-const router = useRoute()
+import { useRouter } from 'vue-router';
 
-const savedJobs = computed(() => {
-    return process.client ? JSON.parse(localStorage.getItem('savedJobs') || '[]') : [];
-});
-
-const items = [
-    {
-        title: 'Home',
-        disabled: false,
-        to: '/',
-    },
-    {
-        title: (router.fullPath).toString().substring(1),
-        disabled: true,
-        to: router.fullPath,
-    },
-]
+const router = useRouter()
+const savedJobsData = process.client
+    ? localStorage.getItem("savedJobs")
+    : null;
+const savedJobs = ref(savedJobsData ? JSON.parse(savedJobsData) : []);
+console.log(savedJobs);
 
 </script>
 
@@ -25,8 +14,8 @@ const items = [
     <div class="savedJobs">
         <VContainer>
             <div>
-                <v-breadcrumbs :items="items" divider="/"
-                    class="px-0 text-h6 font-italic text-decoration-underline"></v-breadcrumbs>
+                <VBtn variant="text" class="text-h6 font-italic px-0" prepend-icon="mdi-arrow-left-thin"
+                    @click="router.go(-1)">back</VBtn>
             </div>
 
             <div class="pt-4">

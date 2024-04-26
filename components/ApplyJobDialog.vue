@@ -39,7 +39,7 @@ const selectResume = (e: any) => {
 const handleApplicationSubmit = async () => {
     try {
         const res = await refForm.value?.validate();
-        if (res.valid) {
+        if (res?.valid) {
             const data = new FormData();
             data.append("resume", selectedResume.value);
             data.append("job_id", jobApplicationData.value.job_id);

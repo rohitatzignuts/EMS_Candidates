@@ -1,41 +1,30 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
+import { useRouter } from "vue-router";
 import { useJobStore } from "../store/useJobStore";
 import { storeToRefs } from "pinia";
-import { onMounted } from 'vue';
+import { onMounted } from "vue";
 
 const jobStore = useJobStore();
 const { userAppliedJobs } = storeToRefs(jobStore);
 const { getUserAppliedJobs } = jobStore;
-const router = useRoute()
-const items = [
-    {
-        title: 'Home',
-        disabled: false,
-        to: '/',
-    },
-    {
-        title: (router.fullPath).toString().substring(1),
-        disabled: true,
-        to: router.fullPath,
-    },
-]
+const router = useRouter();
+
 onMounted(() => {
-    getUserAppliedJobs()
-})
+    getUserAppliedJobs();
+});
 </script>
 
 <template>
     <div class="savedJobs">
         <VContainer>
             <div>
-                <v-breadcrumbs :items="items" divider="/"
-                    class="px-0 text-h6 font-italic text-decoration-underline"></v-breadcrumbs>
+                <VBtn variant="text" class="text-h6 font-italic px-0" prepend-icon="mdi-arrow-left-thin"
+                    @click="router.go(-1)">back</VBtn>
             </div>
 
             <div class="pt-4">
-                <div class="text-h4 font-weight-medium appliedJobsText mb-6"><mark class="appliedJobsSpan">Jobs You Have
-                        Applied For...</mark>
+                <div class="text-h4 font-weight-medium appliedJobsText mb-6">
+                    <mark class="appliedJobsSpan">Jobs You Have Applied For...</mark>
                 </div>
                 <div v-if="userAppliedJobs.length > 0" class="appliedJobsContainer">
                     <VRow>
@@ -76,7 +65,7 @@ mark {
 }
 
 .appliedJobsContainer::-webkit-scrollbar-track {
-    background: #FEFDED;
+    background: #fefded;
     /* Color of the track */
 }
 

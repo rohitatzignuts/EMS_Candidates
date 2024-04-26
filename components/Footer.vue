@@ -4,14 +4,14 @@
     <div class="footer">
         <VContainer class="pa-8">
             <VRow>
-                <VCol cols="6">
+                <VCol lg="6" sm="12" xs="12">
                     <h1 class="text-5 font-weight-bold ">Job HUNT</h1>
                     <span class="text-body-2">
                         Collins Street West, Victoria Near Bank Road
                         Australia QHR12456.
                     </span>
                 </VCol>
-                <VCol cols="6">
+                <VCol lg="6" sm="12" xs="12">
                     <VRow>
                         <VCol>
                             <div>

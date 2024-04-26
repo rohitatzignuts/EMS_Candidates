@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import axios from "axios";
-import { useAuthStore } from '~/store/useAuthStore'
 
-const authStore = useAuthStore()
-const { loginToken } = authStore
-const isAuthenticated = ref<boolean>(loginToken ? true : false)
+let loginToken = process.client
+    ? localStorage.getItem("loginToken")
+    : null
+const  isAuthenticated  = ref<boolean>(loginToken !== null)
 const items = [
     { title: "Applications", to: '/applications' },
     { title: "Saved Jobs", to: '/savedJobs' },
+    { title: "All Jobs", to: '/allJobs' },
 ];
 
 const handleLogout = async () => {
@@ -22,7 +23,6 @@ const handleLogout = async () => {
             }
         );
         if (response) {
-            isAuthenticated.value = false
             useNuxtApp().$toast.info("Logged out successfully!!");
             if (process.client) {
                 localStorage.removeItem("loginToken");
@@ -36,9 +36,8 @@ const handleLogout = async () => {
         }
     }
 };
-
-watchEffect(() => {
-    isAuthenticated.value
+watchEffect(()=>{
+    isAuthenticated
 })
 </script>
 
@@ -53,32 +52,36 @@ watchEffect(() => {
                             <h1>Job HUNT</h1>
                         </NuxtLink>
                         <div class="d-flex justify-space-between align-center ga-4">
-                            <div>
-                                <NuxtLink v-if="!isAuthenticated" to="/login">
-                                    <VBtn prepend-icon="mdi-login" variant="tonal">
-                                        sign in</VBtn>
-                                </NuxtLink>
-                                <VBtn v-else prepend-icon="mdi-login" variant="tonal" @click="handleLogout">
-                                    Log Out</VBtn>
-                            </div>
-                            <div>
-                                <VMenu v-if="isAuthenticated">
-                                    <template v-slot:activator="{ props }">
-                                        <VBtn v-bind="props" variant="text" rounded="0">
-                                            <VIcon size="large" class="pa-0 text-h4">mdi-menu</VIcon>
-                                        </VBtn>
-                                    </template>
-                                    <VList id="menu">
-                                        <VListItem v-for="(item, index) in items" :key="index" :value="index"
-                                            background-color="#FA7070">
-                                            <NuxtLink :to="item.to">
-                                                <VListItemTitle id="menuItems">{{ item.title }}
-                                                </VListItemTitle>
-                                            </NuxtLink>
-                                        </VListItem>
-                                    </VList>
-                                </VMenu>
-                            </div>
+
+                            <NuxtLink to="/">
+                                <VBtn variant="tonal">
+                                    Home
+                                </VBtn>
+                            </NuxtLink>
+                            <NuxtLink v-if="!isAuthenticated" to="/login">
+                                <VBtn prepend-icon="mdi-login" variant="tonal">
+                                    sign in</VBtn>
+                            </NuxtLink>
+                            <VBtn v-else prepend-icon="mdi-login" variant="tonal" @click="handleLogout">
+                                Log Out</VBtn>
+
+                            <VMenu v-if="isAuthenticated">
+                                <template v-slot:activator="{ props }">
+                                    <VBtn v-bind="props" variant="text" rounded="0">
+                                        <VIcon size="large" class="pa-0 text-h4">mdi-menu</VIcon>
+                                    </VBtn>
+                                </template>
+                                <VList id="menu">
+                                    <VListItem v-for="(item, index) in items" :key="index" :value="index"
+                                        background-color="#FA7070">
+                                        <NuxtLink :to="item.to">
+                                            <VListItemTitle id="menuItems">{{ item.title }}
+                                            </VListItemTitle>
+                                        </NuxtLink>
+                                    </VListItem>
+                                </VList>
+                            </VMenu>
+
                         </div>
                     </div>
                 </VContainer>

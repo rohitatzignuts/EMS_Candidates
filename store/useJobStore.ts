@@ -3,11 +3,29 @@ import axios from "axios";
 import { ref } from "vue";
 
 export const useJobStore = defineStore("jobs", () => {
+  const trendingJobs = ref<Array<object>>([]);
   const allJobs = ref<Array<object>>([]);
   const loginToken = process.client ? localStorage.getItem("loginToken") : null;
   const userEmail = process.client ? localStorage.getItem("userEmail") : null;
   const userAppliedJobs = ref<Array<object>>([]);
   const savedJobsArray = ref<Array<object>>([]);
+  const savedJobsData = process.client
+    ? localStorage.getItem("savedJobs")
+    : null;
+  const savedJobs = ref(savedJobsData ? JSON.parse(savedJobsData) : []);
+
+  const getTrendingJobs = async () => {
+    try {
+      const response = await axios.get("jobs", {
+        params: {
+          trending: "trending",
+        },
+      });
+      trendingJobs.value = response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getAllJobs = async () => {
     try {
@@ -57,22 +75,28 @@ export const useJobStore = defineStore("jobs", () => {
 
   const handleJobRemove = (id: number) => {
     try {
-      savedJobsArray.value = savedJobsArray.value.filter(
-        (job) => job.id !== id
-      );
-      localStorage.setItem("savedJobs", JSON.stringify(savedJobsArray.value));
+      const index = savedJobs.value.findIndex((job) => job.id === id);
+      if (index !== -1) {
+        savedJobs.value.splice(index, 1);
+        localStorage.setItem("savedJobs", JSON.stringify(savedJobs.value));
+        // Trigger reactivity here by assigning a new value to savedJobs.value
+        savedJobs.value = [...savedJobs.value];
+      }
     } catch (error) {
       useNuxtApp().$toast.error("Failed to remove the job 😓");
     }
   };
 
   return {
-    getAllJobs,
+    getTrendingJobs,
     savedJobsArray,
+    getAllJobs,
     handleJobSave,
+    trendingJobs,
     allJobs,
     getUserAppliedJobs,
     handleJobRemove,
+    savedJobs,
     userAppliedJobs,
   };
 });
