@@ -18,7 +18,7 @@ export const useJobStore = defineStore('jobs', () => {
 		: null
 	const savedJobs = ref(savedJobsData ? JSON.parse(savedJobsData) : [])
 
-  // fetch trending jobs 
+	// fetch trending jobs
 	const getTrendingJobs = async () => {
 		try {
 			const response = await axios.get('jobs', {
@@ -32,7 +32,7 @@ export const useJobStore = defineStore('jobs', () => {
 		}
 	}
 
-  // fetch all the jobs
+	// fetch all the jobs
 	const getAllJobs = async () => {
 		try {
 			const response = await axios.get('jobs')
@@ -42,7 +42,7 @@ export const useJobStore = defineStore('jobs', () => {
 		}
 	}
 
-  // fetch the jobs user has applied for
+	// fetch the jobs user has applied for
 	const getUserAppliedJobs = async () => {
 		try {
 			const response = await axios.get('applications/status', {
@@ -60,15 +60,15 @@ export const useJobStore = defineStore('jobs', () => {
 		}
 	}
 
-  // save the jobs to localstorage
+	// save the jobs to localstorage
 	const handleJobSave = (job: object) => {
 		try {
 			const jobId = job.id
-      // check for duplicate entries
+			// check for duplicate entries
 			if (savedJobsArray.value.some((savedJob) => savedJob?.id === jobId)) {
 				useNuxtApp().$toast.info('Job already saved! 👍')
 			} else {
-        // add new job 
+				// add new job
 				savedJobsArray.value.push(job)
 				if (process.client) {
 					localStorage.setItem(
@@ -83,14 +83,14 @@ export const useJobStore = defineStore('jobs', () => {
 		}
 	}
 
-  // remove saved jobs from localstorage
+	// remove saved jobs from localstorage
 	const handleJobRemove = (id: number) => {
 		try {
-      // find the clicked job via id
+			// find the clicked job via id
 			const index = savedJobs.value.findIndex((job) => job.id === id)
-      // if found
+			// if found
 			if (index !== -1) {
-        // remove that job from the savedJobs array
+				// remove that job from the savedJobs array
 				savedJobs.value.splice(index, 1)
 				localStorage.setItem('savedJobs', JSON.stringify(savedJobs.value))
 				// Trigger reactivity here by assigning a new value to savedJobs.value

@@ -205,9 +205,14 @@ const handleUserRegister = async () => {
 						</VForm>
 					</VWindowItem>
 				</VWindow>
+                <VCardActions><NuxtLink to="/">Continue without Login....</NuxtLink></VCardActions>
 			</VCardText>
 		</VCard>
 	</div>
 </template>
 
-<style scoped></style>
+<style scoped>
+a{
+    color: unset;
+}
+</style>

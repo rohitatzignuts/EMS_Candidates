@@ -52,11 +52,9 @@ const statusChipColor = (value: string) =>
 						</div>
 						<!-- companny name and job title  -->
 						<div>
-							<caption>
-								{{
-									props.job.company_name
-								}}
-							</caption>
+							<p>
+								{{ props.job.company_name }}
+							</p>
 							<strong>{{ props.job.job_title ?? props.job.title }}</strong>
 						</div>
 					</VCol>

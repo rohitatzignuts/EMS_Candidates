@@ -23,11 +23,19 @@ onMounted(() => {
 		</div>
 		<!-- show currently trending jobs  -->
 		<VContainer class="mb-6">
-			<VRow>
-				<VCol v-for="job in trendingJobs" :key="job.id">
-					<FeaturedJobsCard :job="job" @handle-save-job="handleJobSave(job)" />
-				</VCol>
-			</VRow>
+			<div v-if="trendingJobs.length > 0">
+				<VRow>
+					<VCol v-for="job in trendingJobs" :key="job.id">
+						<FeaturedJobsCard
+							:job="job"
+							@handle-save-job="handleJobSave(job)"
+						/>
+					</VCol>
+				</VRow>
+			</div>
+			<div v-else>
+				<p id="nothing"class="text-h6 font-weight-bold">Nothing to see here....🗑️</p>
+			</div>
 			<div class="py-4 mt-4">
 				<NuxtLink to="/allJobs">
 					<VBtn
@@ -53,7 +61,10 @@ mark {
 	padding-bottom: 0.5em;
 	background-color: rgb(250, 112, 112, 0.75);
 }
-
+#nothing{
+	border: 0.2rem dotted #FA7070;
+	padding: 0.75rem;
+}
 a {
 	color: unset;
 	text-decoration: none;

@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useJobStore } from '~/store/useJobStore'
+import { storeToRefs } from 'pinia'
+// const jobStore = useJobStore()
+// const {savedJobs,test} = storeToRefs(jobStore)
+// console.log(test.value);
 
 const router = useRouter()
 const savedJobsData = process.client ? localStorage.getItem('savedJobs') : null
@@ -8,10 +13,10 @@ const savedJobs = ref(savedJobsData ? JSON.parse(savedJobsData) : [])
 
 <template>
 	<div class="savedJobs">
-        <!-- jobs saved by user  -->
+		<!-- jobs saved by user  -->
 		<VContainer>
 			<div>
-                <!-- go back button  -->
+				<!-- go back button  -->
 				<VBtn
 					variant="text"
 					class="text-h6 font-italic px-0"
@@ -25,16 +30,16 @@ const savedJobs = ref(savedJobsData ? JSON.parse(savedJobsData) : [])
 				<div class="text-h4 font-weight-medium appliedJobsText mb-6">
 					<mark class="appliedJobsSpan">Jobs You Have Saved...</mark>
 				</div>
-                <!-- show saved jobs if more than one  -->
+				<!-- show saved jobs if more than one  -->
 				<div v-if="savedJobs.length > 0" class="appliedJobsContainer">
 					<VRow>
 						<VCol v-for="job in savedJobs" :id="job.id" cols="12">
-                            <!-- ApplicationCard component  -->
+							<!-- ApplicationCard component  -->
 							<ApplicationCard :job="job" />
 						</VCol>
 					</VRow>
 				</div>
-                <!-- show this message if less than one  -->
+				<!-- show this message if less than one  -->
 				<div v-else>
 					<p class="text-h6">you haven't saved any jobs yet....</p>
 				</div>
