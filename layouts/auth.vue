@@ -1,19 +1,20 @@
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
 <template>
-    <div>
-        <main>
-            <VContainer>
-                <slot />    
-            </VContainer>
-        </main>
-    </div>
+	<div>
+		<!-- auth layout for login page  -->
+		<main>
+			<VContainer>
+				<slot />
+			</VContainer>
+		</main>
+	</div>
 </template>
+
 <style scoped>
 main {
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
+	min-height: 100vh;
+	display: grid;
+	place-items: center;
 }
 </style>

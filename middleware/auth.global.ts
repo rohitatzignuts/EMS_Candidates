@@ -15,6 +15,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
             }
         }
 
+        // redirect authenticated user to '/' if he tries to access '/login' route
         if(to.path === '/login' && isAuthenticated){
             return navigateTo("/");
         }
