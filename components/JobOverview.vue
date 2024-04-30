@@ -107,6 +107,7 @@ watchEffect(() => {
 </template>
 
 <style scoped>
+/* styles for the mark tag  */
 mark {
 	display: inline-block;
 	line-height: 0em;

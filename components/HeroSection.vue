@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
 	<div>
 		<section class="hero">
@@ -23,6 +21,7 @@
 </template>
 
 <style scoped>
+/* styles for the hero section  */
 .hero {
 	background-image: url(../public/simple-banner.webp);
 	background-size: cover;
@@ -34,7 +33,7 @@
 	text-align: center;
 	font-size: 2rem;
 }
-
+/* styles fot the h1 tag  */
 h1 {
 	line-height: 1.25;
 	color: #fa7070;

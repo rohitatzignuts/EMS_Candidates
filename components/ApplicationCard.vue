@@ -113,5 +113,3 @@ const statusChipColor = (value: string) =>
 		</VCard>
 	</div>
 </template>
-
-<style scoped></style>

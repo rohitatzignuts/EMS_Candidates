@@ -31,10 +31,12 @@ const jobApplicationData = ref<Application>({
 })
 const loginToken = process.client ? localStorage.getItem('loginToken') : null
 
+// handle file selection
 const selectResume = (e: any) => {
 	selectedResume.value = e.target.files[0]
 }
 
+// handle user application submittion
 const handleApplicationSubmit = async () => {
 	try {
 		const res = await refForm.value?.validate()
@@ -123,5 +125,3 @@ const handleApplicationSubmit = async () => {
 		</v-dialog>
 	</div>
 </template>
-
-<style scoped></style>

@@ -17,6 +17,7 @@ definePageMeta({
 </template>
 
 <style scoped>
+/* styles for mark tag  */
 mark {
 	display: inline-block;
 	line-height: 0em;

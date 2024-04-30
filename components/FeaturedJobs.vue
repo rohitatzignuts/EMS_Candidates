@@ -6,6 +6,7 @@ const jobStore = useJobStore()
 const { trendingJobs } = storeToRefs(jobStore)
 const { getTrendingJobs, handleJobSave } = jobStore
 
+// fetch trending jobs when this component mounts
 onMounted(() => {
 	getTrendingJobs()
 })
@@ -51,20 +52,23 @@ onMounted(() => {
 </template>
 
 <style scoped>
+/* styles for trending jobs section on the home page  */
 .featured {
 	min-height: max-content;
 }
-
+/* styles for mark tag  */
 mark {
 	display: inline-block;
 	line-height: 0em;
 	padding-bottom: 0.5em;
 	background-color: rgb(250, 112, 112, 0.75);
 }
+/* styles for message text if trending jobs are not available  */
 #nothing{
 	border: 0.2rem dotted #FA7070;
 	padding: 0.75rem;
 }
+/* style for a tag  */
 a {
 	color: unset;
 	text-decoration: none;

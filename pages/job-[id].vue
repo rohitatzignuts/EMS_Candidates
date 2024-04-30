@@ -34,10 +34,12 @@ const fetchJobById = async () => {
 	}
 }
 
+// watch for the change in the job id
 watchEffect(() => {
 	jobId.value
 })
 
+// fetch the the jobs with id when this component mounts 
 onMounted(() => {
 	fetchJobById()
 })
@@ -63,6 +65,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
+/* styles for .jobOverview container  */
 .jobOverview {
 	height: calc(100vh - 64px);
 }

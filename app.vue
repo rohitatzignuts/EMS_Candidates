@@ -7,6 +7,7 @@
 </template>
 
 <style scoped>
+/* style for overall app background  */
 .main {
 	--color: #7272724d;
 	background-color: #fefded;

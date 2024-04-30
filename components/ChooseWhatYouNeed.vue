@@ -1,5 +1,3 @@
-<script setup></script>
-
 <template>
 	<div class="ChooseWhatYouNeed text-center pa-12">
 		<div>
@@ -53,6 +51,7 @@
 </template>
 
 <style scoped>
+/* styles ChooseWhatYouNeed section  */
 .ChooseWhatYouNeed {
 	min-height: 50vh;
 	background-color: #fa7070;

@@ -41,6 +41,7 @@ const handleLogout = async () => {
 	}
 }
 
+// watch for any changes in the isAuthenticated's value
 watchEffect(() => {
 	isAuthenticated.value
 })
@@ -103,11 +104,11 @@ a {
 	text-decoration: none;
 	color: unset;
 }
-
+/* styles for navbar menu items  */
 #menuItems {
 	color: #fa7070;
 }
-
+/* styles for navbar menu   */
 #menu {
 	background-color: #fefded;
 }

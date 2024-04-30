@@ -1,5 +1,3 @@
-<script setup></script>
-
 <template>
 	<div>
 		<HeroSection />
@@ -9,4 +7,3 @@
 	</div>
 </template>
 
-<style scoped></style>

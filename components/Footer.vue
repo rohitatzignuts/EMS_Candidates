@@ -1,5 +1,3 @@
-<script setup></script>
-
 <template>
 	<div class="footer">
 		<VContainer class="pa-8">
@@ -50,18 +48,19 @@
 </template>
 
 <style scoped>
+/* style for footer  */
 .footer {
 	min-height: 25vh;
 	background-color: #fa7070;
 	color: #fefded;
 }
-
+/* style for ul, li tags  */
 ul,
 li {
 	list-style-type: none;
 	line-height: 2rem;
 }
-
+/* style for a tag  */
 a {
 	text-decoration: none;
 	color: unset;

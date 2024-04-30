@@ -9,13 +9,14 @@ const { userAppliedJobs } = storeToRefs(jobStore)
 const { getUserAppliedJobs } = jobStore
 const router = useRouter()
 
+// fetch the jobs user has applied for when the component mounts 
 onMounted(() => {
 	getUserAppliedJobs()
 })
 </script>
 
 <template>
-	<div class="savedJobs">
+	<div class="applications">
         <!-- listing of user's job applications  -->
 		<VContainer>
 			<div>
@@ -50,38 +51,39 @@ onMounted(() => {
 </template>
 
 <style scoped>
+/* styles for mark tag  */
 mark {
 	display: inline-block;
 	line-height: 0em;
 	padding-bottom: 0.5em;
 	background-color: rgb(250, 112, 112, 0.75);
 }
-
-.savedJobs {
+/* styles for applicatios page  */
+.applications {
 	min-height: calc(100vh - 64px);
 }
-
+/* styles for appliedJobsContainer */
 .appliedJobsContainer {
 	height: 75vh;
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
-
+/* styles for appliedJobsContainer scroll bar*/
 .appliedJobsContainer::-webkit-scrollbar {
 	width: 8px;
 	/* Width of the scrollbar */
 }
-
+/* styles for appliedJobsContainer scroll bar*/
 .appliedJobsContainer::-webkit-scrollbar-track {
 	background: #fefded;
 	/* Color of the track */
 }
-
+/* styles for appliedJobsContainer scroll thumb*/
 .appliedJobsContainer::-webkit-scrollbar-thumb {
 	background: rgb(250, 112, 112, 0.75);
 	/* Color of the scrollbar handle */
 }
-
+/* styles for appliedJobsContainer scroll thumb*/
 .appliedJobsContainer::-webkit-scrollbar-thumb:hover {
 	background: rgb(250, 112, 112, 0.75);
 	/* Color of the scrollbar handle on hover */

@@ -1,5 +1,3 @@
-<script setup></script>
-
 <template>
 	<div class="contactUs">
 		<div class="pa-12 text-center">
@@ -27,4 +25,3 @@
 	</div>
 </template>
 
-<style scoped></style>

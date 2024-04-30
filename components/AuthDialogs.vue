@@ -212,6 +212,7 @@ const handleUserRegister = async () => {
 </template>
 
 <style scoped>
+/* styles for a tag  */
 a{
     color: unset;
 }

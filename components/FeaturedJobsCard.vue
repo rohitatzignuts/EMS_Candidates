@@ -81,11 +81,11 @@ watchEffect(() => {
 </template>
 
 <style scoped>
+/* style for a tag  */
 a {
 	color: unset;
 	text-decoration: none;
 }
-
 a:hover {
 	color: #fa7070;
 }
