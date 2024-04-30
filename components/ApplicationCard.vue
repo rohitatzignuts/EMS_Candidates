@@ -73,11 +73,11 @@ const statusChipColor = (value: string) =>
 						<!-- apply and remove buttons for saved page -->
 						<div v-else>
 							<NuxtLink :to="`job-${props.job.id}`">
-								<VBtn variant="flat" rounded color="#C6EBC5"> Apply </VBtn>
+								<VBtn variant="flat" rounded color="#C6EBC5" class="mb-2"> Apply </VBtn>
 							</NuxtLink>
 							<VBtn
 								rounded
-								class="ms-2"
+								class="ms-2 mb-2"
 								variant="tonal"
 								color="#FA7070"
 								@click="handleJobRemove(props.job.id)"

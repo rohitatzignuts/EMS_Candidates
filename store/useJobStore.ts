@@ -6,7 +6,6 @@ export const useJobStore = defineStore('jobs', () => {
 	const trendingJobs = ref<Array<object>>([]) // array to save trending jobs
 	const allJobs = ref<Array<object>>([]) // array to save all the jobs
 	const userAppliedJobs = ref<Array<object>>([]) // array to save jobs user has applied for
-	const savedJobsArray = ref<Array<object>>([]) // array to save jobs user has saved
 
 	// get loginToken from the localstorage
 	const loginToken = process.client ? localStorage.getItem('loginToken') : null
@@ -61,20 +60,17 @@ export const useJobStore = defineStore('jobs', () => {
 	}
 
 	// save the jobs to localstorage
-	const handleJobSave = (job: object) => {
+	const handleJobSave = (job: any) => {
 		try {
 			const jobId = job.id
 			// check for duplicate entries
-			if (savedJobsArray.value.some((savedJob) => savedJob?.id === jobId)) {
+			if (savedJobs.value.some((savedJob: any) => savedJob?.id === jobId)) {
 				useNuxtApp().$toast.info('Job already saved! 👍')
 			} else {
 				// add new job
-				savedJobsArray.value.push(job)
+				savedJobs.value.push(job)
 				if (process.client) {
-					localStorage.setItem(
-						'savedJobs',
-						JSON.stringify(savedJobsArray.value)
-					)
+					localStorage.setItem('savedJobs', JSON.stringify(savedJobs.value))
 				}
 				useNuxtApp().$toast.success('Job saved successfully! 🙌')
 			}
@@ -87,14 +83,10 @@ export const useJobStore = defineStore('jobs', () => {
 	const handleJobRemove = (id: number) => {
 		try {
 			// find the clicked job via id
-			const index = savedJobs.value.findIndex((job) => job.id === id)
-			// if found
-			if (index !== -1) {
-				// remove that job from the savedJobs array
-				savedJobs.value.splice(index, 1)
+			savedJobs.value = savedJobs.value.filter((job:any) => job.id !== id)
+			if (process.client) {
+				// store new savedJobs in the localstorage
 				localStorage.setItem('savedJobs', JSON.stringify(savedJobs.value))
-				// Trigger reactivity here by assigning a new value to savedJobs.value
-				savedJobs.value = [...savedJobs.value]
 			}
 		} catch (error) {
 			useNuxtApp().$toast.error('Failed to remove the job 😓')
@@ -103,7 +95,6 @@ export const useJobStore = defineStore('jobs', () => {
 
 	return {
 		getTrendingJobs,
-		savedJobsArray,
 		getAllJobs,
 		handleJobSave,
 		trendingJobs,

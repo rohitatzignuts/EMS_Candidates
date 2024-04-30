@@ -1,10 +1,5 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { useJobStore } from '~/store/useJobStore'
-import { storeToRefs } from 'pinia'
-// const jobStore = useJobStore()
-// const {savedJobs,test} = storeToRefs(jobStore)
-// console.log(test.value);
 
 const router = useRouter()
 const savedJobsData = process.client ? localStorage.getItem('savedJobs') : null
