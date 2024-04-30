@@ -45,9 +45,12 @@ const handleUserLogin = async () => {
 			// store user email and login token
 			localStorage.setItem('loginToken', response.data.access_token)
 			localStorage.setItem('userEmail', userLoginData.value.email)
+			// show login confirmation 
+			setTimeout(() => {
+				useNuxtApp().$toast.success('Logged in successfully!!')
+			}, 500);
 			router.push({ path: '/' })
 			isAuthenticated.value = true
-			useNuxtApp().$toast.success('Logged in successfully!!')
 			// reset form feilds
 			refLoginForm.value?.reset()
 			refLoginForm.value?.resetValidation()
@@ -71,6 +74,7 @@ const handleUserRegister = async () => {
 			if (response) {
 				refSignupForm.value?.reset()
 				refSignupForm.value?.resetValidation()
+				useNuxtApp().$toast.success('Regestered successfully!!')
 				// shift user to login tab
 				tab.value = 'LogIn'
 			}

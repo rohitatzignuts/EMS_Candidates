@@ -25,7 +25,10 @@ const handleLogout = async () => {
 			}
 		)
 		if (response) {
-			useNuxtApp().$toast.info('Logged out successfully!!')
+			// show confirmation 
+			setTimeout(() => {
+				useNuxtApp().$toast.info('Logged out successfully!!')
+			}, 500);
             router.push({ path: '/login' })
 			// remove items from localStorage
 			if (process.client) {
