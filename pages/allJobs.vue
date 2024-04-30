@@ -43,7 +43,7 @@ onMounted(() => {
 						</VRow>
 					</div>
 					<div v-else>
-						<p class="text-h6">you haven't applied for any jobs yet....</p>
+						<p class="text-h6">No jobs for now 😓....</p>
 					</div>
 				</div>
 			</VContainer>
