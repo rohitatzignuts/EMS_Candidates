@@ -49,7 +49,6 @@ export const useJobStore = defineStore('jobs', () => {
 					Authorization: `Bearer ${loginToken}`
 				}
 			})
-			console.log(response.data)
 			userAppliedJobs.value = response.data.data
 		} catch (error) {
 			console.log(error)
