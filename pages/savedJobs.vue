@@ -1,9 +1,17 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useJobStore } from '~/store/useJobStore'
 
 const router = useRouter()
-const savedJobsData = process.client ? localStorage.getItem('savedJobs') : null
-const savedJobs = ref(savedJobsData ? JSON.parse(savedJobsData) : [])
+let jobs = useJobStore()
+let { savedJobs } = storeToRefs(jobs)
+
+onMounted(() => {
+	const localSavedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]')
+	if (localSavedJobs) {
+		savedJobs.value = localSavedJobs
+	}
+})
 </script>
 
 <template>
@@ -26,7 +34,10 @@ const savedJobs = ref(savedJobsData ? JSON.parse(savedJobsData) : [])
 					<mark class="appliedJobsSpan">Jobs You Have Saved...</mark>
 				</div>
 				<!-- show saved jobs if more than one  -->
-				<div v-if="savedJobs.length > 0" class="savedJobsContainer">
+				<div
+					v-if="savedJobs && savedJobs.length > 0"
+					class="savedJobsContainer"
+				>
 					<VRow>
 						<VCol v-for="job in savedJobs" :id="job.id" cols="12">
 							<!-- ApplicationCard component  -->

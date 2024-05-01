@@ -12,10 +12,7 @@ export const useJobStore = defineStore('jobs', () => {
 	// get userEmail from the localstorage
 	const userEmail = process.client ? localStorage.getItem('userEmail') : null
 	// get savedJobs from the localstorage
-	const savedJobsData = process.client
-		? localStorage.getItem('savedJobs')
-		: null
-	const savedJobs = ref(savedJobsData ? JSON.parse(savedJobsData) : [])
+	const savedJobs = ref<any[]>([])
 
 	// fetch trending jobs
 	const getTrendingJobs = async () => {
@@ -83,7 +80,7 @@ export const useJobStore = defineStore('jobs', () => {
 	const handleJobRemove = (id: number) => {
 		try {
 			// find the clicked job via id
-			savedJobs.value = savedJobs.value.filter((job:any) => job.id !== id)
+			savedJobs.value = savedJobs.value.filter((job: any) => job.id !== id)
 			if (process.client) {
 				// store new savedJobs in the localstorage
 				localStorage.setItem('savedJobs', JSON.stringify(savedJobs.value))

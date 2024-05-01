@@ -6,4 +6,3 @@
 		<ContactUs />
 	</div>
 </template>
-
