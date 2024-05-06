@@ -8,7 +8,9 @@ type jobType = {
 	description: string
 	location: string
 	pay: string
-	company_name: string
+	company: {
+		name: string
+	}
 }
 
 const router = useRoute()
@@ -19,7 +21,7 @@ const loginToken = process.client ? localStorage.getItem('loginToken') : null
 
 const fetchJobById = async () => {
 	try {
-		const response = await axios.get(`/job/${jobId.value}`, {
+		const response = await axios.get(`/jobs/${jobId.value}`, {
 			headers: {
 				Authorization: `Bearer ${loginToken}`
 			}
@@ -39,7 +41,7 @@ watchEffect(() => {
 	jobId.value
 })
 
-// fetch the the jobs with id when this component mounts 
+// fetch the the jobs with id when this component mounts
 onMounted(() => {
 	fetchJobById()
 })

@@ -9,7 +9,9 @@ const props = defineProps<{
 		location: string
 		pay: string
 		company_logo: string
-		company_name: string
+		company: {
+			name: string
+		}
 		is_trending?: number
 	}
 }>()
@@ -81,9 +83,9 @@ watchEffect(() => {
 				</div>
 				<div class="d-flex justify-space-start ga-12 mt-12">
 					<!-- company name  -->
-					<div class="d-flex align-center ga-1">
+					<div class="d-flex align-center ga-1" v-if="props.job.company">
 						<VIcon icon="mdi-domain" size="x-large" />
-						<span class="text-h5">{{ props.job.company_name }}</span>
+						<span class="text-h5">{{ props.job.company.name }}</span>
 					</div>
 					<!-- job location  -->
 					<div class="d-flex align-center ga-1">

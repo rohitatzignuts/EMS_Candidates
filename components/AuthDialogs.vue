@@ -43,12 +43,12 @@ const handleUserLogin = async () => {
 		if (res?.valid) {
 			const response = await axios.post('/login', userLoginData.value)
 			// store user email and login token
-			localStorage.setItem('loginToken', response.data.access_token)
+			localStorage.setItem('loginToken', response.data.data.access_token)
 			localStorage.setItem('userEmail', userLoginData.value.email)
-			// show login confirmation 
+			// show login confirmation
 			setTimeout(() => {
 				useNuxtApp().$toast.success('Logged in successfully!!')
-			}, 500);
+			}, 500)
 			router.push({ path: '/' })
 			isAuthenticated.value = true
 			// reset form feilds
@@ -209,7 +209,9 @@ const handleUserRegister = async () => {
 						</VForm>
 					</VWindowItem>
 				</VWindow>
-                <VCardActions><NuxtLink to="/">Continue without Login....</NuxtLink></VCardActions>
+				<VCardActions
+					><NuxtLink to="/">Continue without Login....</NuxtLink></VCardActions
+				>
 			</VCardText>
 		</VCard>
 	</div>
@@ -217,7 +219,7 @@ const handleUserRegister = async () => {
 
 <style scoped>
 /* styles for a tag  */
-a{
-    color: unset;
+a {
+	color: unset;
 }
 </style>

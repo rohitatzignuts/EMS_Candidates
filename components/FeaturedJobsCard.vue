@@ -4,8 +4,11 @@ import { avatarText } from '../utils'
 const props = defineProps<{
 	job: {
 		id: number
-		company_logo: string
-		company_name: string
+		company: {
+			id?: number
+			logo: string
+			name: string
+		}
 		title: string
 		location: string
 		pay: string
@@ -33,16 +36,16 @@ watchEffect(() => {
 						<!-- company logo  -->
 						<NuxtLink :to="`job-${props.job.id}`">
 							<VAvatar
-								:color="props.job.company_logo ? '' : 'primary'"
-								:variant="!props.job.company_logo ? 'tonal' : undefined"
+								:color="props.job.company.logo ? '' : 'primary'"
+								:variant="!props.job.company.logo ? 'tonal' : undefined"
 								size="x-large"
 								class="mb-2"
 							>
 								<VImg
-									v-if="props.job.company_logo"
-									:src="`http://127.0.0.1:8000/storage/${props.job.company_logo}`"
+									v-if="props.job.company.logo"
+									:src="`http://127.0.0.1:8000/storage/${props.job.company.logo}`"
 								/>
-								<span v-else>{{ avatarText(props.job.company_name) }}</span>
+								<span v-else>{{ avatarText(props.job.company.name) }}</span>
 							</VAvatar>
 							<!-- job title  -->
 							<p class="text-h6 font-weight-bold">{{ props.job.title }}</p>
@@ -50,7 +53,7 @@ watchEffect(() => {
 						<!-- company name and job location  -->
 						<p class="mt-2">
 							<VChip prepend-icon="mdi-domain" class="me-4">{{
-								props.job.company_name
+								props.job.company.name
 							}}</VChip>
 							<VChip color="primary" prepend-icon="mdi-pin">{{
 								props.job.location

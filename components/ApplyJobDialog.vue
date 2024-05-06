@@ -46,7 +46,7 @@ const handleApplicationSubmit = async () => {
 			data.append('job_id', jobApplicationData.value.job_id)
 			data.append('user_email', jobApplicationData.value.user_email)
 			const response = await axios.post(
-				`/job-${currentjob_id.value}/apply`,
+				`/job/${currentjob_id.value}/apply`,
 				data,
 				{
 					headers: {
